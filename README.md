@@ -239,6 +239,3 @@ A discussion of the error profile (where the model fails and why) lives in the t
 
 ---
 
-## Acknowledgment
-
-Developed as the AI Research Intern technical assignment for **GalaxEye Space**. Submission deadline: 13 May 2026.
