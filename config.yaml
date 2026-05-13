@@ -1,0 +1,119 @@
+# ==============================
+# Binary Segmentation Config
+# ==============================
+
+project:
+  name: "binary-change-detection"
+  task: "binary_segmentation"
+  save_dir: "./outputs"
+
+seed: 42
+device: "cuda"  # "cuda" or "cpu"
+
+# ------------------------------
+# Dataset
+# ------------------------------
+dataset:
+  data_root: "./data"
+  train_split: "train/train"
+  val_split: "val/val"
+  test_split: "test/test"
+
+  pre_event_dir: "pre-event"
+  post_event_dir: "post-event"
+  target_dir: "target"
+
+  image_size: 256
+  num_workers: 4
+  pin_memory: true
+
+# ------------------------------
+# Model
+# ------------------------------
+model:
+  name: "unetplusplus"
+  encoder: "resnet34"
+  encoder_weights: "imagenet"
+  in_channels: 4   # 3 EO (RGB) + 1 SAR (intensity)
+  classes: 1
+  activation: null  # Keep null for BCEWithLogits training
+
+# ------------------------------
+# Training
+# ------------------------------
+training:
+  epochs: 80
+  batch_size: 8
+  learning_rate: 0.001
+  weight_decay: 0.00001
+
+  mixed_precision: false
+  gradient_clip_norm: 1.0
+
+  early_stopping:
+    enabled: true
+    patience: 12
+    min_delta: 0.0
+
+# ------------------------------
+# Optimizer
+# ------------------------------
+optimizer:
+  name: "adam"
+  betas: [0.9, 0.999]
+  eps: 0.00000001
+
+# ------------------------------
+# Scheduler
+# ------------------------------
+scheduler:
+  name: "cosine"  # cosine | step | plateau
+  t_max: 80
+  eta_min: 0.000001
+
+  step_size: 20
+  gamma: 0.5
+
+  factor: 0.5
+  patience: 3
+  min_lr: 0.0000001
+
+# ------------------------------
+# Loss
+# ------------------------------
+loss:
+  name: "dice_bce"
+  dice_weight: 1.0
+  bce_weight: 1.0
+  pos_weight: null
+  auto_balance: false
+
+# ------------------------------
+# Augmentations
+# ------------------------------
+augmentations:
+  train:
+    resize: [256, 256]
+    horizontal_flip_prob: 0.5
+    vertical_flip_prob: 0.5
+    random_rotate_90_prob: 0.5
+    normalize: true
+
+  val:
+    resize: [256, 256]
+    normalize: true
+
+# ------------------------------
+# Checkpointing / Logging
+# ------------------------------
+checkpoint:
+  save_dir: "./outputs/checkpoints"
+  monitor: "val_iou"
+  mode: "max"
+  save_best_only: true
+
+logging:
+  log_interval: 20
+  tqdm: true
+  results_dir: "./outputs/results"
+  visualizations_dir: "./outputs/visualizations"

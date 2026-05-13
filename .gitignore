@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project artifacts
+outputs/
+checkpoints/
+*.pth
+*.pt
+
+# Data (large; users should fetch separately)
+data/
+!data/.gitkeep
+
+# Logs
+*.log
+runs/
+
+# Jupyter
+.ipynb_checkpoints/
